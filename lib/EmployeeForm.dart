@@ -40,24 +40,22 @@ class _EmployeeFormState extends State<EmployeeForm> {
           ],
         )),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FloatingActionButton(
-              heroTag: 'button1', child: Icon(Icons.save), onPressed: () => {}),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            heroTag: 'button2',
-            child: Icon(Icons.navigate_next),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EmployeeScreen(),
-              ),
+      floatingActionButton:
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        FloatingActionButton(
+            heroTag: 'button1', child: Icon(Icons.save), onPressed: () => {}),
+        SizedBox(height: 10),
+        FloatingActionButton(
+          heroTag: 'button2',
+          child: Icon(Icons.navigate_next),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EmployeeScreen(),
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }
