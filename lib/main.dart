@@ -1,6 +1,5 @@
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
 import 'package:bloc_toturial/bloc/Employee_delegate.dart';
-import 'package:bloc_toturial/model/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './EmployeeForm.dart';

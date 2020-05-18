@@ -49,7 +49,10 @@ class _EmployeeFormState extends State<EmployeeForm> {
         FloatingActionButton(
           heroTag: 'button1',
           child: Icon(Icons.save),
-          onPressed: () => BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.add(Employee(_employeeName))),
+          onPressed: () =>
+              BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.add(
+            Employee(_employeeName),
+          ),),
         ),
         SizedBox(height: 10),
         FloatingActionButton(
