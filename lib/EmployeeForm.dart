@@ -51,7 +51,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
           child: Icon(Icons.save),
           onPressed: () =>
               BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.add(
-            Employee(_employeeName),
+            Employee.adalt(_employeeName),
           ),),
         ),
         SizedBox(height: 10),
