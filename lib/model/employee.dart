@@ -1,12 +1,9 @@
 class Employee {
   String name;
-  String childName;
+  
 
-  Employee.adalt(String name) {
+  Employee(String name) {
     this.name = name;
   }
 
-  Employee.child(String childName) {
-    this.name = childName;
-  }
 }

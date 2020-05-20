@@ -1,3 +1,4 @@
+import 'package:bloc_toturial/ChildForm.dart';
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
 import 'package:bloc_toturial/events/EmployeeEvent.dart';
 import 'package:bloc_toturial/model/employee.dart';
@@ -36,7 +37,14 @@ class EmployeeList extends StatelessWidget {
                           )),
                   ButtonBar(
                     children: <Widget>[
-                      FlatButton(onPressed: null, child: Text('Child form')),
+                      FlatButton(
+                          onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChildForm(),
+                                ),
+                              ),
+                          child: Text('Child form')),
                     ],
                   ),
                 ],

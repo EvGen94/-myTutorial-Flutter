@@ -1,5 +1,6 @@
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
 import 'package:bloc_toturial/model/employee.dart';
+import 'package:bloc_toturial/model/forChild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './EmployeeList.dart';
@@ -51,10 +52,10 @@ class _EmployeeFormState extends State<EmployeeForm> {
           child: Icon(Icons.save),
           onPressed: () =>
               BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.add(
-            Employee.adalt(_employeeName),
+            Employee(_employeeName),
           ),),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10), 
         FloatingActionButton(
           heroTag: 'button2',
           child: Icon(Icons.navigate_next),
