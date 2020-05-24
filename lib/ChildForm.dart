@@ -1,10 +1,9 @@
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
-import 'package:bloc_toturial/model/employee.dart';
 import 'package:bloc_toturial/model/forChild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import './EmployeeList.dart';
-import './EmployeeScreen.dart';
+import './ChildList.dart';
+import './childScreen.dart';
 import './events/EmployeeEvent.dart';
 
 class ChildForm extends StatefulWidget {
@@ -41,15 +40,36 @@ class ChildFormState extends State<ChildForm> {
                 });
               },
             ),
-            FloatingActionButton(
-              onPressed: () => BlocProvider.of<ChildBloc>(context).add(
-                EmployeeEvent.addChild(
-                  Child(_childName),
-                ),
-              ),
-            )
+            Container(
+              padding: EdgeInsets.all(36),
+              child: ChildList(),
+            ),
           ],
         )),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            child: Icon(Icons.save),
+            onPressed: () => BlocProvider.of<ChildBloc>(context).add(
+              EmployeeEvent.addChild(
+                Child(_childName),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            heroTag: 'button2',
+            child: Icon(Icons.navigate_next),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChildScreen(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
