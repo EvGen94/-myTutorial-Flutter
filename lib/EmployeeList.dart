@@ -14,19 +14,20 @@ class EmployeeList extends StatefulWidget {
 
 class _EmployeeListState extends State<EmployeeList> {
   @override
- /* void initState() {
+  void initState() {
     super.initState();
-    DatabaseProvider.db.getFoods().then((valuesFromgetFoods) => {
-          BlocProvider.of(context)
-              .add(EmployeeEvent.addList(valuesFromgetFoods))
-        });
-  }*/
+    DatabaseProvider.db.getFoods().then(
+      (valuesFromgetFoods) {
+        BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.addList(valuesFromgetFoods));
+      },
+    );
+  }
 
+  @override
   Widget build(BuildContext context) {
     return Container(
-       
         child: BlocConsumer<EmployeeBloc, List<Employee>>(
-          /*buildWhen: (List<Employee> previous, List<Employee> current) {
+      /*buildWhen: (List<Employee> previous, List<Employee> current) {
         return true;
       },
       listenWhen: (List<Employee> previous, List<Employee> current) {
@@ -35,48 +36,47 @@ class _EmployeeListState extends State<EmployeeList> {
         }
         return false;
       },*/
-          builder: (context, employeeList) {
-            return ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                print("foodList: $employeeList");
+      builder: (context, employeeList) {
+        return ListView.separated(
+          itemBuilder: (BuildContext context, int index) {
+            print("foodList: $employeeList");
 
-                Employee employee = employeeList[index];
-                return Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+            Employee employee = employeeList[index];
+            return Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                      title: Text('${employee.name}'),
+                      onTap: () => BlocProvider.of<EmployeeBloc>(context).add(
+                            EmployeeEvent.delete(index),
+                          )),
+                  ButtonBar(
                     children: <Widget>[
-                      ListTile(
-                          title: Text('${employee.name}'),
-                          onTap: () =>
-                              BlocProvider.of<EmployeeBloc>(context).add(
-                                EmployeeEvent.delete(index),
-                              )),
-                      ButtonBar(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChildForm(),
-                                    ),
-                                  ),
-                              child: Text('Child form')),
-                        ],
-                      ),
+                      FlatButton(
+                          onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChildForm(),
+                                ),
+                              ),
+                          child: Text('Child form')),
                     ],
                   ),
-                );
-
-                /* ListTile(
-                title: Text('${employee.name}'),
-              );*/
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  Divider(color: Colors.black),
-              itemCount: employeeList.length,
+                ],
+              ),
             );
 
-            /*builder(
+            /* ListTile(
+                title: Text('${employee.name}'),
+              );*/
+          },
+          separatorBuilder: (BuildContext context, int index) =>
+              Divider(color: Colors.black),
+          itemCount: employeeList.length,
+        );
+
+        /*builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           padding: EdgeInsets.all(16),
@@ -108,12 +108,12 @@ class _EmployeeListState extends State<EmployeeList> {
             );
           },
         );*/
-          },
-          listener: (BuildContext context, employeeList) {
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('Added!'),
-            ));
-          },
+      },
+      listener: (BuildContext context, employeeList) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('Added!'),
         ));
+      },
+    ));
   }
 }
