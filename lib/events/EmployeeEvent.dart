@@ -1,17 +1,22 @@
 import 'package:bloc_toturial/model/employee.dart';
 import 'package:bloc_toturial/model/forChild.dart';
 
-enum EventType { add, addChild, delete }
+enum EventType { add, addChild, delete, addList }
 
 class EmployeeEvent {
   Employee employee;
   Child childName;
   int employeeIndex;
   EventType eventType;
+  List<Employee> employeeList;
 
   EmployeeEvent.add(Employee employee) {
     this.eventType = EventType.add;
     this.employee = employee;
+  }
+
+  EmployeeEvent.addList(List<Employee> employee) {
+    employeeList = employee;
   }
 
   EmployeeEvent.addChild(Child childName) {

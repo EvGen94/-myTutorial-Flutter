@@ -1,50 +1,97 @@
+import './model/employee.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-import 'package:path/path.dart';
 
-class DBProvider {
-  DBProvider._();
-  static final DBProvider db = DBProvider._();
-  static Database _database;
+class DatabaseProvider {
+  static const String TABLE = "food";
+  static const String COLUMN_ID = "id";
+  static const String COLUMN_NAME = "name";
+
+  DatabaseProvider._();
+  static final DatabaseProvider db = DatabaseProvider._();
+
+  Database _database;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
+    print("database getter called");
 
-    _database = await initDB();
+    if (_database != null) {
+      return _database;
+    }
+
+    _database = await createDatabase();
 
     return _database;
   }
 
-  initDB() async {
-    return await openDatabase(join(await getDatabasesPath(), 'data.db'),
-        onCreate: (db, version) async {
-      await db.execute('''
-     CREATE TABLE forms (
-       idex INTEGER PRIMARY KEY, name TEXT,  childName TEXT)
-     ''');
-    }, version: 1);
+  Future<Database> createDatabase() async {
+    String dbPath = await getDatabasesPath();
+
+    return await openDatabase(
+      join(dbPath, 's1DB.db'),
+      version: 5,
+      onCreate: (Database database, int version) async {
+        print("Creating food table");
+
+        await database.execute(
+          "CREATE TABLE $TABLE ("
+          "$COLUMN_ID INTEGER PRIMARY KEY,"
+          "$COLUMN_NAME TEXT"
+          ")",
+        );
+      },
+    );
   }
 
-  newPerson(addPerson) async {
+  Future<List<Employee>> getFoods() async {
     final db = await database;
 
-    var res = await db.rawInsert('''
-   INSERT INTO forms (
-     index , name, childName
-   ) VALUES (?,?,?)
-   ''', [addPerson.index, addPerson.name, addPerson.childName]);
+    var foods = await db.query(TABLE, columns: [
+      COLUMN_ID,
+      COLUMN_NAME,
+    ]);
 
-    return res;
+    //  print("для теста !!! $foods");
+    List<Employee> foodList = List<Employee>();
+
+    foods.forEach((currentFood) {
+      //print("для теста $currentFood");
+      Employee food = Employee.fromMap(currentFood);
+
+      foodList.add(food);
+    });
+
+    return foodList;
   }
 
-  Future<dynamic> getPerson() async {
+  Future<Employee> insert(Employee food) async {
     final db = await database;
-    var res = await db.query("data");
-    if (res.length == 0) {
-      return null;
-    } else {
-      var resMap = res[0];
-      return resMap.isNotEmpty ? resMap : Null;
-    }
+    food.id = await db.insert(TABLE, food.toMap());
+    print("для теста $food.id");
+    return food;
   }
 }
+/*
+  Future<int> delete(int id) async {
+    final db = await database;
+
+    return await db.delete(
+      TABLE_WORK,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> update(Food food) async {
+    final db = await database;
+
+    return await db.update(
+      TABLE_WORK,
+      food.toMap(),
+      where: "id = ?",
+      whereArgs: [food.id],
+    );
+  }
+}
+*/

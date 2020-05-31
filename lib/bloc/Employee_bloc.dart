@@ -17,6 +17,9 @@ class EmployeeBloc extends Bloc<EmployeeEvent, List<Employee>> {
         }
         yield newState;
         break;
+      case EventType.addList:
+        yield event.employeeList;
+        break;
       case EventType.delete:
         List<Employee> newState = List.from(state);
         newState.removeAt(event.employeeIndex);
