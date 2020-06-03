@@ -26,7 +26,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, List<Employee>> {
         yield newState;
         break;
       default:
-        throw Exception('Event not found $event');
+       
     }
   }
 }

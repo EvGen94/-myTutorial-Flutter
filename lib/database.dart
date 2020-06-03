@@ -4,9 +4,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class DatabaseProvider {
-  static const String TABLE = "food";
-  static const String COLUMN_ID = "id";
-  static const String COLUMN_NAME = "name";
+  static const String TABLE1 = "employeeTab";
+  static const String TABLE2 = "kidsTab";
+  static const String COLUMN_ID1 = "id";
+  static const String COLUMN_NAME1 = "name";
+   static const String COLUMN_ID2 = "id";
+  static const String COLUMN_NAME2 = "childName";
 
   DatabaseProvider._();
   static final DatabaseProvider db = DatabaseProvider._();
@@ -14,7 +17,7 @@ class DatabaseProvider {
   Database _database;
 
   Future<Database> get database async {
-    print("database getter called");
+    // print("database getter called");
 
     if (_database != null) {
       return _database;
@@ -29,34 +32,41 @@ class DatabaseProvider {
     String dbPath = await getDatabasesPath();
 
     return await openDatabase(
-      join(dbPath, 's1DB.db'),
-      version: 5,
+      join(dbPath, 's2DB.db'),
+      version: 1,
       onCreate: (Database database, int version) async {
-        print("Creating food table");
+        // print("Creating food table");
 
         await database.execute(
-          "CREATE TABLE $TABLE ("
-          "$COLUMN_ID INTEGER PRIMARY KEY,"
-          "$COLUMN_NAME TEXT"
+          "CREATE TABLE $TABLE1 ("
+          "$COLUMN_ID1 INTEGER PRIMARY KEY,"
+          "$COLUMN_NAME1 TEXT"
+          ")",
+        );
+
+        await database.execute(
+          "CREATE TABLE $TABLE2 ("
+          "$COLUMN_ID2 INTEGER PRIMARY KEY,"
+          "$COLUMN_NAME2 TEXT"
           ")",
         );
       },
     );
   }
 
-  Future<List<Employee>> getFoods() async {
+  Future<List<Employee>> getFoods(int flag) async {
     final db = await database;
-
-    var foods = await db.query(TABLE, columns: [
-      COLUMN_ID,
-      COLUMN_NAME,
+    if{flag = 1} 
+    var foods = await db.query(TABLE1, columns: [
+      COLUMN_ID1,
+      COLUMN_NAME1,
     ]);
 
-    //  print("для теста !!! $foods");
+    print("для теста1  $foods");
     List<Employee> foodList = List<Employee>();
 
     foods.forEach((currentFood) {
-      //print("для теста $currentFood");
+      print("для теста2 $currentFood");
       Employee food = Employee.fromMap(currentFood);
 
       foodList.add(food);
@@ -68,7 +78,7 @@ class DatabaseProvider {
   Future<Employee> insert(Employee food) async {
     final db = await database;
     food.id = await db.insert(TABLE, food.toMap());
-    print("для теста $food.id");
+    print("для теста insertfood $food.toMap().id");
     return food;
   }
 }
