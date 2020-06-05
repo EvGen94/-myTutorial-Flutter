@@ -54,7 +54,7 @@ class ChildFormState extends State<ChildForm> {
             child: Icon(Icons.save),
             onPressed: () => BlocProvider.of<ChildBloc>(context).add(
               EmployeeEvent.addChild(
-                Child(_childName),
+                Child(),
               ),
             ),
           ),

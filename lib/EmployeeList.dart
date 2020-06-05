@@ -15,7 +15,7 @@ class _EmployeeListState extends State<EmployeeList> {
   @override
   void initState() {
     super.initState();
-    DatabaseProvider.db.getFoods().then(
+    DatabaseProvider.db.getData(eventType: EventType.add).then(
       (valuesFromgetFoods) {
         BlocProvider.of<EmployeeBloc>(context)
             .add(EmployeeEvent.addList(valuesFromgetFoods));
