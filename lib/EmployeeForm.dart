@@ -11,10 +11,6 @@ class EmployeeForm extends StatefulWidget {
   final Employee employee;
   final int employeeIndex;
 
-  /*EmployeeForm({Employee employee, int employeeIndex}) {
-    this.employee = employee;
-    this.employeeIndex = employeeIndex;
-  }*/
   EmployeeForm({this.employee, this.employeeIndex});
 
   @override
@@ -26,6 +22,7 @@ class EmployeeForm extends StatefulWidget {
 class _EmployeeFormState extends State<EmployeeForm> {
   // String _employeeName;
   String _name;
+  String _surname;
 
   @override
   void initState() {
@@ -60,6 +57,16 @@ class _EmployeeFormState extends State<EmployeeForm> {
                 });
               },
             ),
+            SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(labelText: 'Name'),
+              style: TextStyle(fontSize: 22),
+              onChanged: (text) {
+                setState(() {
+                  _surname = text;
+                });
+              },
+            ),
             Flexible(
               child: Container(child: Center(child: EmployeeList())),
             ),
@@ -74,15 +81,12 @@ class _EmployeeFormState extends State<EmployeeForm> {
           onPressed: () {
             Employee employee = Employee(
               name: _name,
+              surname: _surname
             );
-            print('Test save onPressed!$employee');
-            DatabaseProvider.db.insert(employee).then((value) =>
+            DatabaseProvider.db.insertEmployee(employee).then((value) =>
                 BlocProvider.of<EmployeeBloc>(context)
                     .add(EmployeeEvent.add(value)));
           },
-          //  BlocProvider.of<EmployeeBloc>(context).add(EmployeeEvent.add(
-          //  Employee(_employeeName),
-          // ),);
         ),
         SizedBox(height: 10),
         FloatingActionButton(

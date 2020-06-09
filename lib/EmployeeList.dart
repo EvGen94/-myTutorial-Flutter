@@ -1,10 +1,12 @@
 import 'package:bloc_toturial/ChildForm.dart';
+import 'package:bloc_toturial/ChildList.dart';
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
 import 'package:bloc_toturial/events/EmployeeEvent.dart';
 import 'package:bloc_toturial/model/employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './database.dart';
+
 
 class EmployeeList extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class _EmployeeListState extends State<EmployeeList> {
   @override
   void initState() {
     super.initState();
-    DatabaseProvider.db.getData(eventType: EventType.add).then(
+    DatabaseProvider.db.getStaffData().then(
       (valuesFromgetFoods) {
         BlocProvider.of<EmployeeBloc>(context)
             .add(EmployeeEvent.addList(valuesFromgetFoods));
@@ -43,20 +45,38 @@ class _EmployeeListState extends State<EmployeeList> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     ListTile(
-                        title: Text('${employee.name}'),
+                        title:
+                            Text('${employee.name} and id is ${employee.id}'),
+                        leading: Text('${employee.surname}'),
                         onTap: () => BlocProvider.of<EmployeeBloc>(context).add(
                               EmployeeEvent.delete(index),
                             )),
                     ButtonBar(
                       children: <Widget>[
                         FlatButton(
-                            onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChildForm(),
-                                  ),
-                                ),
-                            child: Text('Child form')),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChildForm(idPass: employee.id),
+                              ),
+                            );
+                          },
+                          child: Text('Child form'),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChildList(idPass: employee.id),
+                              ),
+                            );
+                          },
+                          child: Text('see child list'),
+                        )
                       ],
                     ),
                   ],

@@ -35,4 +35,5 @@ class EmployeeEvent {
     this.eventType = EventType.delete;
     this.employeeIndex = index;
   }
+
 }

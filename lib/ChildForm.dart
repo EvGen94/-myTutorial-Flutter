@@ -1,19 +1,24 @@
 import 'package:bloc_toturial/bloc/Employee_bloc.dart';
+import 'package:bloc_toturial/model/employee.dart';
 import 'package:bloc_toturial/model/forChild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './ChildList.dart';
 import './childScreen.dart';
 import './events/EmployeeEvent.dart';
+import 'database.dart';
 
 class ChildForm extends StatefulWidget {
+  final int idPass;
+
+  const ChildForm({Key key, this.idPass}) : super(key: key);
   @override
   ChildFormState createState() => ChildFormState();
 }
 
 class ChildFormState extends State<ChildForm> {
-
   String _childName;
+  //String _childSurname;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +45,18 @@ class ChildFormState extends State<ChildForm> {
                 });
               },
             ),
+            SizedBox(
+              height: 10,
+            ),
+            /*TextField(
+              decoration: InputDecoration(labelText: 'Surname'),
+              style: TextStyle(fontSize: 22),
+              onChanged: (text) {
+                setState(() {
+                  _childSurname = text;
+                });
+              },
+            ),*/
             Container(
               padding: EdgeInsets.all(36),
               child: ChildList(),
@@ -52,11 +69,17 @@ class ChildFormState extends State<ChildForm> {
         children: <Widget>[
           FloatingActionButton(
             child: Icon(Icons.save),
-            onPressed: () => BlocProvider.of<ChildBloc>(context).add(
-              EmployeeEvent.addChild(
-                Child(),
-              ),
-            ),
+            onPressed: () {
+              Child name = Child(
+                childName: _childName,
+                //  childSurname: _childSurname,
+                //id: _id widget.idPass
+              );
+              print("idpass is ${widget.idPass}");
+              DatabaseProvider.db.insertKid(name, widget.idPass).then((value) =>
+                  BlocProvider.of<ChildBloc>(context)
+                      .add(EmployeeEvent.addChild(value)));
+            },
           ),
           SizedBox(height: 10),
           FloatingActionButton(

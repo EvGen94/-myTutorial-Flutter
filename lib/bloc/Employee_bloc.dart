@@ -26,7 +26,6 @@ class EmployeeBloc extends Bloc<EmployeeEvent, List<Employee>> {
         yield newState;
         break;
       default:
-       
     }
   }
 }
@@ -45,7 +44,9 @@ class ChildBloc extends Bloc<EmployeeEvent, List<Child>> {
         }
         yield newState;
         break;
-
+      case EventType.addChildList:
+        yield event.childList;
+        break;
       default:
         throw Exception('Event not found $event');
     }

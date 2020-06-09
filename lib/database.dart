@@ -39,89 +39,96 @@ class DatabaseProvider {
     String dbPath = await getDatabasesPath();
 
     return await openDatabase(
-      join(dbPath, 's2DB.db'),
-      version: 1,
+      join(dbPath, 'test4.db'),
+      version: 4,
       onCreate: (Database database, int version) async {
         // print("Creating food table");
 
         await database.execute(
           "CREATE TABLE $TABLE1 ("
           "$COLUMN_ID1 INTEGER PRIMARY KEY,"
-          "$COLUMN_NAME1 TEXT"
+          "$COLUMN_NAME1 TEXT,"
+          "$COLUMN_SURNAME1 TEXT"
           ")",
         );
 
         await database.execute(
           "CREATE TABLE $TABLE2 ("
-          "$ID2 INTEGER PRIMARY KEY,"
-          "$NAME2 TEXT"
+          "$ID2 INTEGER,"
+          "$NAME2 TEXT,"
+          "$SURNAME2 TEXT"
           ")",
         );
       },
     );
   }
 
-  Future<void> getData(
-      {@required EventType eventType, int id}) async {
+  Future<List<Employee>> getStaffData() async {
     final db = await database;
 
-    if (eventType == EventType.add) {
-      var employee = await db.query(TABLE1, columns: [
-        COLUMN_ID1,
-        COLUMN_NAME1,
-        COLUMN_SURNAME1
-      ]);
+    var employee = await db
+        .query(TABLE1, columns: [COLUMN_ID1, COLUMN_NAME1, COLUMN_SURNAME1]);
 
-      List<Employee> employeeList = List<Employee>();
+    List<Employee> employeeList = List<Employee>();
 
-      employee.forEach((curValue) {
-        print("для теста2 $curValue");
-        Employee employee = Employee.fromMap(curValue);
+    employee.forEach((curValue) {
+      print("для теста2 $curValue");
+      Employee employee = Employee.fromMap(curValue);
 
-        employeeList.add(employee);
-      });
+      employeeList.add(employee);
+    });
 
-      return employeeList;
-    }
+    return employeeList;
+  }
 
-    var kidTabRes = await db.query(TABLE2, columns: [
-      ID2,
-      NAME2,
-     SURNAME2
-    ]);
+  Future<List<Child>> getkidsData(int id) async {
+    final db = await database;
+    var kidTabRes = await db.rawQuery('''
+    SELECT * 
+    FROM $TABLE2 
+    WHERE $ID2 = '$id'  
+    ''');
 
-    print("для теста1  $kidTabRes");
     List<Child> childList = List<Child>();
 
     kidTabRes.forEach((curValue) {
-      print("для теста2 $curValue");
       Child kid = Child.fromMap(curValue);
 
       childList.add(kid);
     });
 
     return childList;
-    
   }
 
   Future<Employee> insertEmployee(Employee name) async {
     final db = await database;
-    name.id = await db.insert(TABLE1, name.toMap());
-    print("для теста insertfood $name.toMap().id");
+    name.id = await db.insert(TABLE1, name.toMap()); // проверить int возврат
     return name;
   }
 
-  
   Future<Child> insertKid(Child name, int id) async {
     final db = await database;
-    name.id = await db.insert(TABLE2, name.toMap());
-    print("для теста insertfood $name.toMap().id");
-    name.id = await db.rawInsert('''INSERT INTO $TABLE2 ($ID2, $NAME2, $SURNAME2)
+    int testVar;
+    //name.id = await db.insert(TABLE2, name.toMap()); проверить
+    name.id = id;
+    testVar =
+        await db.rawInsert('''INSERT INTO $TABLE2 ($ID2, $NAME2, $SURNAME2)
+    select 
+    '$id',
+    '${name.childName}',
+    $COLUMN_SURNAME1 
+    FROM $TABLE1 
+    WHERE $COLUMN_ID1 = $id 
+    ''');
+    /*
+        await db.rawInsert('''INSERT INTO $TABLE2 ($ID2, $NAME2, $SURNAME2)
     SELECT
     (SELECT $id); 
-    (SELECT $name);
+    (SELECT ${name.childName});
     (SELECT $COLUMN_SURNAME1 FROM $TABLE1 WHERE $COLUMN_ID1 = $id);
-    ''');
+    ''');*/
+
+    print('return text var is $testVar');
 
     return name;
   }
